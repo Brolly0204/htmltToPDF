@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>电子处方笺</title>
+    <link rel="stylesheet" href="./css/lbyPublic.css" />
+    <link rel="stylesheet" href="./css/vant.css" />
+    <link rel="stylesheet" href="./css/eRecipelNote.css" />
+    <script src="./js/util.js"></script>
+    <!-- <script src="./js/vue.min.js"></script> -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.js"></script>
+    <script src="./js/vant.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script> -->
+    <!-- <script src="./js/jspdf.debug.js"></script> -->
+    <script src="./js/jspdf.umd.min.js"></script>
+    <style>
+      #pdfViewer {
+        width: 700px;
+        height: 2000px;
+      }
+    </style>
+  </head>
+  <body>
+    <div ref="app" id="app" class="e-recipel-page">
+      <div class="container" ref="container">
+        <div class="header">
+          <h2 class="hospital-name">武清医珍堂互联网医院</h2>
+          <h3 class="title">处方笺</h3>
+        </div>
+
+        <div class="personal">
+          <div class="info">
+            <span class="field">姓名：张丹丹</span>
+            <span class="field">性别：女</span>
+          </div>
+          <div class="info">
+            <span class="field">年龄：67岁</span>
+            <span class="field">日期：2021-11-03</span>
+          </div>
+        </div>
+
+        <div class="recipel-card">
+          <h3 class="title">诊断</h3>
+          <div class="main">
+            <div class="record">
+              <span class="label">辨病</span>
+              <p class="text">虚 肾虚不孕</p>
+            </div>
+            <div class="record">
+              <span class="label">辨证</span>
+              <p class="text">阴虚湿盛</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipel-card card border mt">
+          <h3 class="title">开方</h3>
+          <div class="plan">
+            <h3 class="subject">方案一 · 优质颗粒</h3>
+            <div class="drugs">
+              <div v-for="(drug, index) in drugs" class="drug">
+                <span class="name">{{ drug.name }}</span>
+                <span class="amount">{{ drug.quantity }}克</span>
+                <span v-if="drug.desc" class="desc">({{ drug.desc }})</span>
+              </div>
+            </div>
+            <div class="dosage">
+              <p class="usage">
+                共<span class="red">7</span>付，每日<span class="red">1</span
+                >付，<span class="red">1</span>付分<span class="red">3</span
+                >次，
+              </p>
+              <p class="advice">
+                口服 忌生冷，忌油腻，忌辛辣，适当运动，早睡早起。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipel-card card">
+          <h3 class="title">开方</h3>
+          <div class="plan">
+            <h3 class="subject">方案一 · 优质颗粒</h3>
+            <div class="drugs">
+              <div v-for="(drug, index) in drugs" class="drug">
+                <span class="name">{{ drug.name }}</span>
+                <span class="amount">{{ drug.quantity }}克</span>
+                <span v-if="drug.desc" class="desc">({{ drug.desc }})</span>
+              </div>
+            </div>
+            <div class="dosage">
+              <p class="usage">
+                共<span class="red">7</span>付，每日<span class="red">1</span
+                >付，<span class="red">1</span>付分<span class="red">3</span
+                >次，
+              </p>
+              <p class="advice">
+                口服 忌生冷，忌油腻，忌辛辣，适当运动，早睡早起。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="recipel-card card">
+          <h3 class="title">开方</h3>
+          <div class="plan">
+            <h3 class="subject">方案一 · 优质颗粒</h3>
+            <div class="drugs">
+              <div v-for="(drug, index) in drugs" class="drug">
+                <span class="name">{{ drug.name }}</span>
+                <span class="amount">{{ drug.quantity }}克</span>
+                <span v-if="drug.desc" class="desc">({{ drug.desc }})</span>
+              </div>
+            </div>
+            <div class="dosage">
+              <p class="usage">
+                共<span class="red">7</span>付，每日<span class="red">1</span
+                >付，<span class="red">1</span>付分<span class="red">3</span
+                >次，
+              </p>
+              <p class="advice">
+                口服 忌生冷，忌油腻，忌辛辣，适当运动，早睡早起。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 盖章 -->
+        <div class="recipel-card mt">
+          <h3 class="title">签字盖章</h3>
+          <div class="content">
+            <div class="sign">
+              <div class="doctor">
+                <span class="label">医生：</span>
+                <img
+                  ref="doctorName"
+                  class="sign-name"
+                  src="./img/jay.jpeg"
+                  alt=""
+                />
+              </div>
+              <div class="doctor">
+                <span class="label">药师：</span>
+                <img
+                  ref="pharName"
+                  class="sign-name"
+                  src="./img/jay.jpeg"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div class="chapter">
+              <img class="seal" src="./img/chapter.png" alt="chapter" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ref="footer" class="footer-btn">
+        <div class="confirm btn" @click="handleConfirm">
+          确认并发送
+        </div>
+        <div class="confirm btn" @click="handleBack">
+          返回
+        </div>
+      </div>
+    </div>
+    <script src="./js/html2canvas.js"></script>
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: function () {
+          return {
+            jsPDF: null,
+            drugs: [
+              {
+                name: '黄芪',
+                quantity: 30,
+                desc: '后下'
+              },
+              {
+                name: '桔梗',
+                quantity: 30,
+                desc: ''
+              },
+              {
+                name: '黄连',
+                quantity: 30,
+                desc: ''
+              },
+              {
+                name: '煅赤石脂',
+                quantity: 30,
+                desc: ''
+              },
+              {
+                name: '五加皮',
+                quantity: 30,
+                desc: ''
+              }
+            ]
+          }
+        },
+        mounted () {
+          this.initJsPDF() // 初始化jsPDF实例
+          this.createPdf() // 创建pdf
+        },
+        methods: {
+          initJsPDF () {
+            if (typeof window.jspdf === 'function') {
+              this.jsPDF = window.jspdf
+            } else if (window.jspdf) {
+              this.jsPDF = window.jspdf.jsPDF
+            }
+          },
+          createPdf (type = 1) {
+            // 1 单页 2多页
+            this.$nextTick(() => {
+              this.htmlToCanvas().then(canvas => {
+                if (type === 1) {
+                  // 默认生成单页pdf
+                  this.createSinglePDF(canvas)
+                } else {
+                  // 生成多页pdf
+                  this.createMultiPDF(canvas)
+                }
+              })
+            })
+          },
+          // 将html转成canvas
+          htmlToCanvas () {
+            return new Promise((resolve, reject) => {
+              const dom = this.$refs.container
+              // html中在线图片不能跨域（需要服务端解决），否则截图中不显示
+              html2canvas(dom, {
+                useCORS: true,
+                // scale: 2,
+                dpi: 300
+              })
+                .then(resolve)
+                .catch(reject)
+            })
+          },
+          // 创建单页PDF
+          createSinglePDF (canvas) {
+            // https://www.jianshu.com/p/4061bdea2a3e
+            const contentWidth = canvas.width
+            const contentHeight = canvas.height
+            const pageData = canvas.toDataURL('image/jpeg', 1.0)
+            // 生成PDF 宽高尺寸（自定义）
+            const pdfX = ((contentWidth + 10) / 2) * 0.75
+            const pdfY = ((contentHeight + 500) / 2) * 0.75 // 500为底部留白
+            const PDF = new this.jsPDF('', 'pt', [pdfX, pdfY])
+
+            // 设置内容图片的尺寸，img是pt单位
+            const imgX = pdfX
+            const imgY = (contentHeight / 2) * 0.75 //内容图片这里不需要留白的距离
+            PDF.addImage(pageData, 'JPEG', 0, 0, imgX, imgY)
+            // 预览PDF
+            this.previewPDF(PDF)
+          },
+          // 创建多页pdf a4纸的尺寸
+          createMultiPDF (canvas) {
+            // http://www.rotisedapsales.com/snr/cloud2/website/jsPDF-master/docs/jsPDF.html
+            // a4纸的尺寸[595.28,841.89]
+            // 尺寸参数参考地址 http://www.rotisedapsales.com/snr/cloud2/website/jsPDF-master/docs/jspdf.js.html#line47
+            const PDF = new this.jsPDF('', 'pt', 'a4')
+            const contentWidth = canvas.width
+            const contentHeight = canvas.height
+            // 一页pdf显示html页面生成的canvas高度;
+            const pageHeight = (contentWidth / 592.28) * 841.89
+            // 未生成pdf的html页面高度
+            let leftHeight = contentHeight
+            // 页面偏移
+            let position = 0
+            // a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+            const imgWidth = 595.28
+            const imgHeight = (592.28 / contentWidth) * contentHeight
+            const pageData = canvas.toDataURL('image/jpeg', 1.0)
+            if (leftHeight < pageHeight) {
+              // addImage(pageData, 'JPEG', 左，上，宽度，高度)设置
+              PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
+            } else {
+              // 超过一页时，分页打印（每页高度841.89）
+              while (leftHeight > 0) {
+                PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                leftHeight -= pageHeight
+                position -= 841.89
+                if (leftHeight > 2) {
+                  PDF.addPage()
+                }
+              }
+            }
+            // 预览PDF
+            this.previewPDF(PDF)
+          },
+          previewPDF(PDF) {
+            // pdf输出为blob
+            const blob = PDF.output('blob')
+            const blobURL = window.URL.createObjectURL(blob)
+            console.log(blobURL)
+            // 打开新窗口预览pdf
+            window.open(blobURL)
+          },
+          // blob对象转file对象
+          blobToFile(PDF) {
+            var blob = PDF.output('blob')
+            console.log(blob)
+            const file = new window.File(
+              [blob],
+              '合规化',
+              { type: blob.type }
+            )
+            return file
+          },
+          handleConfirm: function () {},
+          handleBack: function () {},
+          base64ToBlob: function (data) {
+            // var code = data.replace(/^data:application\/pdf; .*? base64,$/,'')
+            var code = data.replace(/^data:.*?base64,/, '')
+            //Base64一行不能超过76字符，超过则添加回车换行符。因此需要把base64字段中的换行符，回车符给去掉，有时候因为存在需要把加号空格之类的换回来，取决于base64存取时的规则。
+            code = code.replace(/[\n\r]/g, '')
+            var raw = window.atob(code)
+            let rawLength = raw.length
+            //转换成pdf.js能直接解析的Uint8Array类型
+            let uInt8Array = new Uint8Array(rawLength)
+            for (let i = 0; i < rawLength; ++i) {
+              uInt8Array[i] = raw.charCodeAt(i)
+            }
+            return new Blob([uInt8Array], { type: 'application/pdf' }) // 转成pdf类型
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
